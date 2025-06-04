@@ -2,12 +2,17 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:26.2
     environment:
-      KC_BOOTSTRAP_ADMIN_USERNAME: keycloak # Initial keycloak admin username
-      KC_BOOTSTRAP_ADMIN_PASSWORD: keycloak # Initial keycloak admin password
       KC_HOSTNAME: http://localhost/keycloak/ # Address at which the server is exposed
       KC_HOSTNAME_ADMIN: http://localhost/keycloak/ # Address for accessing the administration console
       KC_HTTP_RELATIVE_PATH: /keycloak/ # Context path behind a reverse proxy
-    command: [start-dev]
+    entrypoint: [ "/bin/bash", "-c" ]
+    command: >
+      "export KC_BOOTSTRAP_ADMIN_USERNAME=$$(cat /run/secrets/keycloak-admin-username)
+       export KC_BOOTSTRAP_ADMIN_PASSWORD=$$(cat /run/secrets/keycloak-admin-password)
+       /opt/keycloak/bin/kc.sh start-dev"
+    secrets:
+      - keycloak-admin-username
+      - keycloak-admin-password
     networks:
       - proxy
     deploy:
@@ -21,4 +26,10 @@ services:
 
 networks:
   proxy:
+    external: true
+
+secrets:
+  keycloak-admin-username:
+    external: true
+  keycloak-admin-password:
     external: true

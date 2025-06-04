@@ -23,5 +23,5 @@ services:
 
 networks:
   proxy:
-    name: proxy
+    name: proxy # Allow external containers to join the network
     attachable: true

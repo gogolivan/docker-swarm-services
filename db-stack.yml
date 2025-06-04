@@ -1,0 +1,55 @@
+x-mongo-base: &mongo-base
+  image: mongo:8 # Mongo image
+  environment:
+    MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/mongo-username # Mongo username from Docker secret
+    MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongo-password # Mongo password from Docker secret
+  secrets:
+    - mongo-keyfile # Mongo keyfile secret
+    - mongo-username # Mongo username secret
+    - mongo-password # Mongo password secret
+  networks:
+    mongo:
+
+x-mongo-base-entrypoint: &mongo-base-entrypoint
+  <<: *mongo-base
+  entrypoint: |
+    bash -c "
+      cp /run/secrets/mongo-keyfile /data/keyfile
+      chmod 400 /data/keyfile
+      chown mongodb:mongodb /data/keyfile
+      docker-entrypoint.sh mongod --keyFile /data/keyfile --replSet rs0 --bind_ip_all
+    "
+
+services:
+  mongo1:
+    <<: *mongo-base-entrypoint
+    ports:
+     - "27017:27017"
+
+  mongo2:
+    <<: *mongo-base-entrypoint
+
+  mongo3:
+    <<: *mongo-base-entrypoint
+
+  mongo-init:
+    <<: *mongo-base
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    volumes:
+      - ./config/mongo/init-replicaset.sh:/docker-entrypoint-initdb.d/init-replicaset.sh:ro
+
+networks:
+  mongo:
+    name: mongo
+    attachable: true
+
+secrets:
+  mongo-keyfile:
+    external: true
+  mongo-username:
+    external: true
+  mongo-password:
+    external: true

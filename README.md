@@ -17,26 +17,48 @@ docker stack ls
 docker stack deploy --resolve-image changed -c management-stack.yml management
 ```
 
-- [Portainer](http://localhost:9000)
+#### [Portainer](http://localhost:9000)
 
 ### Proxy
 ```shell
 docker stack deploy --resolve-image changed -c proxy-stack.yml proxy
 ```
 
-- [Traefik](http://localhost:8080)
+#### [Traefik](http://localhost:8080)
 
 ### DB
 ```shell
 docker stack deploy --resolve-image changed -c db-stack.yml db
 ```
 
-- PostgreSQL
-- MongoDB
+#### PostgreSQL
+
+#### MongoDB
+##### Replica Set
+###### Keyfile
+````shell
+openssl rand -base64 756 | docker secret create mongo-keyfile -
+````
+
+##### Credentials
+```shell
+echo "mongo" | docker secret create mongo-username -
+```
+```shell
+echo "mongo" | docker secret create mongo-password -
+```
 
 ### Auth
 ```shell
 docker stack deploy --resolve-image changed -c auth-stack.yml auth
 ```
 
-- [Keycloak](http://localhost/keycloak/auth/)
+#### [Keycloak](http://localhost/keycloak/auth/)
+##### Credentials
+```shell
+echo "keycloak" | docker secret create keycloak-admin-username -
+```
+
+```shell
+echo "keycloak" | docker secret create keycloak-admin-password -
+```
