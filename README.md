@@ -58,7 +58,21 @@ docker stack deploy --resolve-image changed -c auth-stack.yml auth
 ```shell
 echo "keycloak" | docker secret create keycloak-admin-username -
 ```
-
 ```shell
 echo "keycloak" | docker secret create keycloak-admin-password -
+```
+
+### SMTP
+```shell
+docker stack deploy --resolve-image changed -c smtp-stack.yml smtp
+```
+
+#### [MailDev](http://localhost:1080)
+##### Credentials
+```shell
+echo "maildev" | docker secret create maildev-username -
+```
+
+```shell
+echo "maildev" | docker secret create maildev-password -
 ```

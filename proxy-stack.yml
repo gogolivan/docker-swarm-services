@@ -9,8 +9,8 @@ services:
       - --providers.swarm.network=proxy
       - --entrypoints.web.address=:80 # Create an entrypoint "http" listening on address 80
     ports:
-      - "80:80" # web
-      - "8080:8080" # dashboard
+      - "80:80" # Traefik Web
+      - "8080:8080" # Traefik Dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
