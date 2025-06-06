@@ -2,9 +2,9 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:26.2
     environment:
-      KC_HOSTNAME: http://localhost/keycloak/ # Address at which the server is exposed
-      KC_HOSTNAME_ADMIN: http://localhost/keycloak/ # Address for accessing the administration console
-      KC_HTTP_RELATIVE_PATH: /keycloak/ # Context path behind a reverse proxy
+      KC_HOSTNAME: http://localhost/keycloak # Address at which the server is exposed
+      KC_HOSTNAME_ADMIN: http://localhost/keycloak # Address for accessing the administration console
+      KC_HTTP_RELATIVE_PATH: /keycloak # Context path behind a reverse proxy
     entrypoint: [ "/bin/bash", "-c" ]
     command: >
       "export KC_BOOTSTRAP_ADMIN_USERNAME=$$(cat /run/secrets/keycloak-admin-username)
@@ -20,7 +20,7 @@ services:
       replicas: 1
       labels:
         - traefik.enable=true
-        - traefik.http.routers.keycloak.rule=Host(`localhost`) && PathPrefix(`/keycloak/`)
+        - traefik.http.routers.keycloak.rule=Host(`localhost`) && PathPrefix(`/keycloak`)
         - traefik.http.routers.keycloak.service=keycloak
         - traefik.http.services.keycloak.loadbalancer.server.port=8080
 

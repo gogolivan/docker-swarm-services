@@ -13,25 +13,38 @@ services:
 
   portainer:
     image: portainer/portainer-ce:lts
-    command: -H tcp://tasks.agent:9001 --tlsskipverify
+    command: -H tcp://tasks.agent:9001 --tlsskipverify --base-url /portainer
     ports:
-      - "9443:9443"
-      - "9000:9000" # portainer ui
-      - "8000:8000"
+      - "9443:9443" # Portainer UI HTTP
+      - "9000:9000" # Portainer UI HTTPS
     volumes:
       - portainer_data:/data
     networks:
       - agent_network
+      - proxy
     deploy:
       mode: replicated
       replicas: 1
       placement:
         constraints: [node.role == manager]
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=proxy
+        - traefik.http.routers.portainer.rule=Host(`localhost`) && PathPrefix(`/portainer`)
+        - traefik.http.routers.portainer.entrypoints=web
+        - traefik.http.routers.portainer.service=portainer
+        - traefik.http.routers.portainer.middlewares=portainer_redirect,portainer_stripprefix
+        - traefik.http.middlewares.portainer_redirect.redirectregex.regex=^(.*)/portainer$$
+        - traefik.http.middlewares.portainer_redirect.redirectregex.replacement=$${1}/portainer/
+        - traefik.http.middlewares.portainer_stripprefix.stripprefix.prefixes=/portainer
+        - traefik.http.services.portainer.loadbalancer.server.port=9000 # Portainer UI HTTP
 
 networks:
   agent_network:
     driver: overlay
     attachable: true
+  proxy:
+    external: true
 
 volumes:
   portainer_data:
