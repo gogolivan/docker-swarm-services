@@ -83,6 +83,17 @@ echo "maildev" | docker secret create maildev-username -
 echo "maildev" | docker secret create maildev-password -
 ```
 
+### Automation
+```shell
+docker stack deploy --resolve-image changed -c automation-stack.yml automation
+```
+
+#### n8n
+[http://localhost:5678](http://localhost:5678)
+
+#### Registration
+
 ## Conventions
-- Underscore for middleware name
-- No Double quotes for values
+- Use underscore `_` for middleware name
+- Do not use double quotes for Compose values
+- Use `example.com` (RFC 2606 reserved for testing and documentation)
