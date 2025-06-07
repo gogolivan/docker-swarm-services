@@ -10,11 +10,11 @@ services:
       "export KC_BOOTSTRAP_ADMIN_USERNAME=$$(cat /run/secrets/keycloak-admin-username)
        export KC_BOOTSTRAP_ADMIN_PASSWORD=$$(cat /run/secrets/keycloak-admin-password)
        /opt/keycloak/bin/kc.sh start-dev"
+    networks:
+      - proxy
     secrets:
       - keycloak-admin-username
       - keycloak-admin-password
-    networks:
-      - proxy
     deploy:
       mode: replicated
       replicas: 1

@@ -17,11 +17,11 @@ services:
     ports:
       - "9443:9443" # Portainer UI HTTP
       - "9000:9000" # Portainer UI HTTPS
-    volumes:
-      - portainer_data:/data
     networks:
       - agent_network
       - proxy
+    volumes:
+      - portainer_data:/data
     deploy:
       mode: replicated
       replicas: 1

@@ -94,6 +94,7 @@ docker stack deploy --resolve-image changed -c automation-stack.yml automation
 #### Registration
 
 ## Conventions
+- *Docker Compose* file sections order `x-templates`, `services`, `networks`, `volumes`, `secrets` and `deploy`
 - Use underscore `_` for middleware name
 - Do not use double quotes for Compose values
 - Use `example.com` (RFC 2606 reserved for testing and documentation)
