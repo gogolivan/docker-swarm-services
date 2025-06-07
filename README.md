@@ -11,6 +11,12 @@ docker swarm init --task-history-limit=0
 docker stack ls
 ```
 
+## Conventions
+- *Docker Compose* file sections order `x-templates`, `services`, `networks`, `volumes`, `secrets` and `deploy`
+- Use underscore `_` for middleware name
+- Do not use double quotes for Compose values
+- Use `example.com` (RFC 2606 reserved for testing and documentation)
+
 ## Stacks
 ### Management
 ```shell
@@ -34,15 +40,20 @@ docker stack deploy --resolve-image changed -c db-stack.yml db
 ```
 
 #### PostgreSQL
+##### Secrets
+##### Secrets
+````shell
+echo "postgres" | docker secret create postgres-user -
+````
+````shell
+echo "postgres" | docker secret create postgres-password -
+````
 
 #### MongoDB
-##### Replica Set
-###### Keyfile
+##### Secrets
 ````shell
 openssl rand -base64 756 | docker secret create mongo-keyfile -
 ````
-
-##### Credentials
 ```shell
 echo "mongo" | docker secret create mongo-username -
 ```
@@ -58,7 +69,7 @@ docker stack deploy --resolve-image changed -c auth-stack.yml auth
 #### Keycloak
 [http://localhost/keycloak/auth/](http://localhost/keycloak/auth/)
 
-##### Credentials
+##### Secrets
 ```shell
 echo "keycloak" | docker secret create keycloak-admin-username -
 ```
@@ -74,7 +85,7 @@ docker stack deploy --resolve-image changed -c smtp-stack.yml smtp
 #### MailDev
 [http://localhost:1080](http://localhost:1080)
 
-##### Credentials
+##### Secrets
 ```shell
 echo "maildev" | docker secret create maildev-username -
 ```
@@ -90,11 +101,3 @@ docker stack deploy --resolve-image changed -c automation-stack.yml automation
 
 #### n8n
 [http://localhost:5678](http://localhost:5678)
-
-#### Registration
-
-## Conventions
-- *Docker Compose* file sections order `x-templates`, `services`, `networks`, `volumes`, `secrets` and `deploy`
-- Use underscore `_` for middleware name
-- Do not use double quotes for Compose values
-- Use `example.com` (RFC 2606 reserved for testing and documentation)
