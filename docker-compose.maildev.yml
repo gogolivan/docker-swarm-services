@@ -19,7 +19,7 @@ services:
       - maildev-password
 
 networks:
-  proxy:
+  traefik:
     external: true
 
 secrets:
