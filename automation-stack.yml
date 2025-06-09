@@ -9,7 +9,7 @@ services:
       - n8n_data:/home/node/.n8n
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: ${N8N_REPLICAS:-1}
 
 networks:
   proxy:

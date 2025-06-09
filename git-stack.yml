@@ -1,0 +1,28 @@
+services:
+  gitea:
+    image: docker.gitea.com/gitea:1.24.0
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: always
+    networks:
+      - proxy
+      - gitea
+    ports:
+      - "3000:3000"
+      - "222:22"
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.gitea.rule=Host(`localhost`) && PathPrefix(`/gitea`)"
+        - "traefik.http.services.gitea-websecure.loadbalancer.server.port=3000"
+        - "traefik.http.middlewares.gitea-stripprefix.stripprefix.prefixes=/gitea"
+        - "traefik.http.routers.gitea.middlewares=gitea-stripprefix"
+
+
+networks:
+  proxy:
+    external: true
+  gitea:
+    external: false

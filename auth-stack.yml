@@ -17,12 +17,12 @@ services:
       - keycloak-admin-password
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: ${KEYCLOAK_REPLICAS:-1}
       labels:
-        - traefik.enable=true
-        - traefik.http.routers.keycloak.rule=Host(`localhost`) && PathPrefix(`/keycloak`)
-        - traefik.http.routers.keycloak.service=keycloak
-        - traefik.http.services.keycloak.loadbalancer.server.port=8080
+        - "traefik.enable=true"
+        - "traefik.http.routers.keycloak.rule=Host(`localhost`) && PathPrefix(`/keycloak`)"
+        - "traefik.http.routers.keycloak.service=keycloak"
+        - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
 
 networks:
   proxy:
