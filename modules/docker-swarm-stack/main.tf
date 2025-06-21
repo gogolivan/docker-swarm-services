@@ -35,10 +35,40 @@ resource "terraform_data" "deploy_stack" {
     stack_name   = local.stack_name
     compose_file = var.compose_file
     replicas = var.replicas
+    wait_for = var.wait_for
   }
 
   provisioner "local-exec" {
-    command     = "${local.stack_replicas_env} docker stack deploy --resolve-image changed -c ${self.input.compose_file} ${self.input.stack_name}"
+    command     = <<EOT
+        for stack in ${join(" ", self.input.wait_for)}; do
+          while true; do
+            state=$(docker stack ps "$stack" --no-trunc --format '{{.CurrentState}}' 2>/dev/null)
+            if [ -z "$state" ]; then
+              sleep 2
+              continue
+            fi
+
+            # Check if all stack services are "Running"
+            all_stack_services_running=true
+            while read -r line; do
+              if [[ "$line" != Running* ]]; then
+                all_stack_services_running=false
+                break
+              fi
+            done <<< "$state"
+
+            if $all_stack_services_running; then
+              echo "All services in stack '$stack' are running."
+              break
+            else
+              echo "Waiting for all services in stack '$stack' to be running..."
+              sleep 2
+            fi
+          done
+        done
+
+        ${local.stack_replicas_env} docker stack deploy --resolve-image changed -c ${self.input.compose_file} ${self.input.stack_name}
+    EOT
     working_dir = path.cwd
   }
 

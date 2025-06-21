@@ -23,3 +23,9 @@ variable "secrets" {
   default = {}
   sensitive = true
 }
+
+variable "wait_for" {
+  description = "Wait for stacks"
+  type = list(string)
+  default = []
+}

@@ -266,6 +266,8 @@ module "temporal_stack" {
     TEMPORAL_REPLICAS = var.stack_service_replicas_env_config.TEMPORAL_REPLICAS
   }
 
+  wait_for = ["postgres"]
+
   depends_on = [module.nginx_stack, module.postgres_stack]
 }
 
