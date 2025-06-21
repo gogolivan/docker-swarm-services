@@ -4,13 +4,9 @@
 
 This project is intended to help developers quickly deploy backing services commonly used during the development cycle.
 
-It contains *Terraform* modules for deploying *Docker* services into a *Swarm* cluster.
-It is always possible to run all services manually using `docker stack deploy` command. See <<manual-setup>>.
+It contains *Terraform* modules for deploying *Docker* services into a *Swarm* cluster. See <<automated-setup>>
 
-For <<automated-setup>> Service deployments and replica counts are controlled dynamically using the *Terraform* `replicas` map
-variable, defined in link:variables.tf[`variables.tf`], which specify how many instances of each service should run.
-
-For <<manual-setup>>, the required number of service instances must be set using environment variables.
+It is always possible to run all services manually using the `docker stack deploy` command. See <<manual-setup>>.
 
 == Prerequisites
 
@@ -52,6 +48,9 @@ docker swarm init --task-history-limit=0
 
 Use Terraform to provision Docker Swarm cluster, deploy stacks, and manage resources.
 
+Service deployments and replica counts are controlled dynamically using the *Terraform* `replicas` map
+variable, defined in link:variables.tf[`variables.tf`], which specifies how many instances of each service should run.
+
 [source,shell]
 ----
 terraform init
@@ -71,7 +70,6 @@ terraform plan
 terraform apply
 ----
 
-
 === Destroy
 
 [source,shell]
@@ -79,19 +77,12 @@ terraform apply
 terraform destroy
 ----
 
-[NOTE]
-====
-Formating
-[source,shell]
-----
-terraform fmt
-----
-====
-
 [[manual-setup]]
 == Manual Setup
 
 Manually provision Docker Swarm cluster and manage resources. See <<stacks>>.
+
+The required number of service instances must be configured using environment variables.
 
 [[stacks]]
 == Stacks
