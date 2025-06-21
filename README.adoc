@@ -92,7 +92,9 @@ The required number of service instances must be configured using environment va
 |===
 |Stack |URL | Compose file | Services
 
-|<<traefik>> | http://localhost:8080 | link:docker-compose.traefik.yml[] | Traefik
+|<<traefik>> | http://localhost:8080 +
+http://localhost/whoami | link:docker-compose.traefik.yml[] | Traefik +
+whoami
 
 |<<nginx>> | http://localhost:7233 | link:docker-compose.nginx.yml[] | NGINX
 
@@ -148,6 +150,9 @@ Reverse Proxy
 ----
 docker stack deploy --resolve-image changed -c docker-compose.traefik.yml traefik
 ----
+
+==== Whoami
+Tiny Go webserver that prints OS information and HTTP request to output, ideal for testing.
 
 [[nginx]]
 === https://nginx.org[NGINX]
