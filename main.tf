@@ -6,17 +6,12 @@ data "external" "swarm_status" {
   ]
 }
 
-data "external" "dummy_mongo_keyfile" {
-  program = ["bash", "-c", "echo '{\"value\": \"'$(openssl rand -base64 756)'\"}'"]
-}
-
 resource "random_bytes" "mongo_keyfile" {
   length  = 756
 }
 
 locals {
-  // mongo_keyfile = var.mongo_keyfile != null ? var.mongo_keyfile : random_bytes.mongo_keyfile.base64
-  mongo_keyfile = var.mongo_keyfile != null ? var.mongo_keyfile : data.external.dummy_mongo_keyfile.result.value
+  mongo_keyfile = var.mongo_keyfile != null ? var.mongo_keyfile : random_bytes.mongo_keyfile.base64
 }
 
 /*provider "aws" {
