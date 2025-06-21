@@ -90,37 +90,49 @@ The required number of service instances must be configured using environment va
 .Stacks
 [frame=none,%autowidth]
 |===
-|Stack |URL | Compose file
+|Stack |URL | Compose file | Services
 
-|<<traefik>> | http://localhost:8080 | link:docker-compose.traefik.yml[]
+|<<traefik>> | http://localhost:8080 | link:docker-compose.traefik.yml[] | Traefik
 
-|<<nginx>> | http://localhost:7233 | link:docker-compose.nginx.yml[]
+|<<nginx>> | http://localhost:7233 | link:docker-compose.nginx.yml[] | NGINX
 
 |<<portainer>> | http://localhost:9000 +
-http://localhost/portainer | link:docker-compose.portainer.yml[]
+http://localhost/portainer | link:docker-compose.portainer.yml[] | Portainer CE +
+Portainer Agent
 
-|<<postgres>> | http://localhost:5432 | link:docker-compose.postgres.yml[]
+|<<postgres>> | http://localhost:5432 | link:docker-compose.postgres.yml[] | Postgres
 
-|<<mongo>> | http://localhost:27017 | link:docker-compose.mongo.yml[]
+|<<mongo>> | http://localhost:27017 | link:docker-compose.mongo.yml[] | Mongo
 
-|<<redis>> | http://localhost:6379 | link:docker-compose.redis.yml[]
+|<<redis>> | http://localhost:6379 | link:docker-compose.redis.yml[] | Redis
 
-|<<influxdb>> | http://localhost:8086 | link:docker-compose.influxdb.yml[]
+|<<influxdb>> | http://localhost:8086 | link:docker-compose.influxdb.yml[] | InfluxDB 2
 
 |<<neo4j>> | http://localhost:7474 +
-http://localhost:7687 | link:docker-compose.neo4j.yml[]
+http://localhost:7687 | link:docker-compose.neo4j.yml[] | Neo4j
 
-|<<keycloak>> | http://localhost/keycloak/auth/ | link:docker-compose.keycloak.yml[]
+|<<keycloak>> | http://localhost/keycloak/auth/ | link:docker-compose.keycloak.yml[] | Keycloak
 
-|<<kafka>> | http://localhost:9092 | link:docker-compose.kafka.yml[]
+|<<kafka>> | http://localhost:9092 | link:docker-compose.kafka.yml[] | Kafka
 
-|<<maildev>> | http://localhost:1080 | link:docker-compose.maildev.yml[]
+|<<maildev>> | http://localhost:1080 | link:docker-compose.maildev.yml[] | MailDev
 
-|<<temporal>> | http://localhost:8081/temporal/ | link:docker-compose.temporal.yml[]
+|<<temporal>> | http://localhost:8081/temporal/ | link:docker-compose.temporal.yml[] | Temporal History +
+Temporal Matching +
+Temporal Frontend
+Temporal Worker
+Temporal UI
 
-|<<n8n>> | http://localhost:5678 | link:docker-compose.n8n.yml[]
+|<<n8n>> | http://localhost:5678 | link:docker-compose.n8n.yml[] | n8n
 
-|<<localstack>> | http://localhost:4566 | link:docker-compose.localstack.yml[]
+|<<localstack>> | http://localhost:4566 | link:docker-compose.localstack.yml[] | S3 +
+IAM +
+STS
+
+|<<grafana>> | http://localhost:3000 +
+http://localhost:3100 | link:docker-compose.grafana.yml[] | Grafana +
+Loki +
+Promtail
 
 |===
 
@@ -333,11 +345,14 @@ Local AWS Services
 docker stack deploy --resolve-image changed -c docker-compose.localstack.yml localstack
 ----
 
-- S3
+[[grafana]]
+=== https://grafana.com/[Grafana]
+Observability
 
-- IAM
-
-- STS
+[source,shell]
+----
+docker stack deploy --resolve-image changed -c docker-compose.grafana.yml grafana
+----
 
 == Conventions
 - Compose file name `docker-compose.<stack>.yml`

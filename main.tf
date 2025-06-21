@@ -302,6 +302,20 @@ module "localstack_stack" {
   depends_on = []
 }
 
+module "grafana_stack" {
+  count = var.stack_service_replicas_env_config.GRAFANA_REPLICAS > 0 ? 1 : 0
+
+  source = "./modules/docker-swarm-stack"
+
+  stack_name   = "grafana"
+  compose_file = "docker-compose.grafana.yml"
+  replicas = {
+    GRAFANA_REPLICAS = var.stack_service_replicas_env_config.GRAFANA_REPLICAS
+  }
+
+  depends_on = []
+}
+
 /*module "aws" {
   source = "./modules/aws"
 
