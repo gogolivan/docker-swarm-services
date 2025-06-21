@@ -62,3 +62,13 @@ output "localstack_stack" {
   description = "Localstack stack module output"
   value       = module.localstack_stack
 }
+
+output "prometheus_stack" {
+  description = "Prometheus stack module output"
+  value = module.prometheus_stack
+}
+
+output "grafana_stack" {
+  description = "Grafana stack module output"
+  value = module.grafana_stack
+}

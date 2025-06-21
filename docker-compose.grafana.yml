@@ -11,7 +11,8 @@ services:
     volumes:
       - ./config/grafana/provisioning/datasources/ds.yaml:/etc/grafana/provisioning/datasources/ds.yaml
     networks:
-      grafana:
+      - grafana
+      - prometheus
     deploy:
       mode: replicated
       replicas: ${GRAFANA_REPLICAS:-1}
@@ -58,9 +59,13 @@ services:
       - "9411:9411"   # zipkin
     networks:
       - grafana
+      - prometheus
     deploy:
       mode: replicated
       replicas: ${GRAFANA_REPLICAS:-1}
 
 networks:
   grafana:
+    name: grafana
+  prometheus:
+    external: true

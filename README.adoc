@@ -129,11 +129,13 @@ Temporal UI
 IAM +
 STS
 
+|<<prometheus>> | http://localhost:9090 | link:docker-compose.prometheus.yml[] | Prometheus
+
 |<<grafana>> | http://localhost:3000 +
 http://localhost:3100 +
 http://localhost:3200 | link:docker-compose.grafana.yml[] | Grafana +
 Loki +
-Tempo
+Tempo +
 Promtail +
 
 |===
@@ -345,6 +347,15 @@ Local AWS Services
 [source,shell]
 ----
 docker stack deploy --resolve-image changed -c docker-compose.localstack.yml localstack
+----
+
+[[prometheus]]
+=== https://prometheus.io/[Prometheus]
+Monitoring and alerting toolkit
+
+[source,shell]
+----
+docker stack deploy --resolve-image changed -c docker-compose.prometheus.yml prometheus
 ----
 
 [[grafana]]

@@ -297,6 +297,26 @@ module "localstack_stack" {
   depends_on = []
 }
 
+/*module "aws" {
+  source = "./modules/aws"
+
+  depends_on = [module.localstack_stack]
+}*/
+
+module "prometheus_stack" {
+  count = var.stack_service_replicas_env_config.PROMETHEUS_REPLICAS > 0 ? 1 : 0
+
+  source = "./modules/docker-swarm-stack"
+
+  stack_name   = "prometheus"
+  compose_file = "docker-compose.prometheus.yml"
+  replicas = {
+    PROMETHEUS_REPLICAS = var.stack_service_replicas_env_config.PROMETHEUS_REPLICAS
+  }
+
+  depends_on = []
+}
+
 module "grafana_stack" {
   count = var.stack_service_replicas_env_config.GRAFANA_REPLICAS > 0 ? 1 : 0
 
@@ -308,11 +328,5 @@ module "grafana_stack" {
     GRAFANA_REPLICAS = var.stack_service_replicas_env_config.GRAFANA_REPLICAS
   }
 
-  depends_on = []
+  depends_on = [module.prometheus_stack]
 }
-
-/*module "aws" {
-  source = "./modules/aws"
-
-  depends_on = [module.localstack_stack]
-}*/

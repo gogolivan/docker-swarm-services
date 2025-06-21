@@ -129,6 +129,7 @@ services:
 
 networks:
   temporal:
+    name: temporal
     attachable: true
   postgres:
     external: true
